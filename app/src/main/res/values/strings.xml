@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">drawTogether</string>
+    <string name="app_name" translatable="false">drawTogether</string>
+    <string name="drawScreenTitle">Drawing</string>
 </resources>
