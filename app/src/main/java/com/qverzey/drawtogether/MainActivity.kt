@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Message
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Message
 import androidx.compose.material.icons.filled.Person
@@ -28,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.qverzey.drawtogether.ui.screens.EditProfileScreen
 import com.qverzey.drawtogether.ui.screens.ProfileScreen
 import com.qverzey.drawtogether.ui.screens.SettingScreen
 import com.qverzey.drawtogether.ui.theme.DefaultTheme
@@ -36,11 +38,20 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            DefaultTheme {  // Use your Material 3 theme here
-                // A surface container using the 'background' color from the theme
-                MainScreen()
+            DefaultTheme {
+                val destination = intent.getIntExtra("destination", 2)
+
+                MainScreen(destination)
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MainScreenPreview() {
+    DefaultTheme {
+        MainScreen(4)
     }
 }
 
@@ -65,24 +76,11 @@ fun MainScreen(startIndex: Int = 2) {
     ) { paddingValues ->
         // Main content
         InsideScreen(selectedIndex.intValue, contentPadding = paddingValues)
-        /*
-        Text(
-            text = if (selectedIndex.intValue == 2) "Home Screen" else "Settings Screen",
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            style = MaterialTheme.typography.bodyLarge
-        )*/
     }
+
 }
 
-@Preview(showBackground = true)
-@Composable
-fun MainScreenPreview() {
-    DefaultTheme {
-        MainScreen(0)
-    }
-}
+
 
 @Composable
 fun BottomNavBar(selected: MutableState<Int>) {
@@ -107,7 +105,7 @@ fun BottomNavBar(selected: MutableState<Int>) {
             onClick = { selected.value = 2 }
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Filled.Message, contentDescription = "Messages") },
+            icon = { Icon(Icons.AutoMirrored.Filled.Message, contentDescription = "Messages") },
             label = { Text("Messages") },
             selected = selected.value == 3,
             onClick = { selected.value = 3 }
@@ -125,14 +123,13 @@ fun BottomNavBar(selected: MutableState<Int>) {
 
 @Composable
 fun InsideScreen(screenIndex: Int = 2, contentPadding: PaddingValues = PaddingValues(0.dp)) {
-
-
     when (screenIndex) {
         0 -> SettingScreen(contentPadding)
         1 -> PlaceholderScreen(contentPadding)
         2 -> PlaceholderScreen(contentPadding)
         3 -> PlaceholderScreen(contentPadding)
         4 -> ProfileScreen(contentPadding,"qverzey", "0001", "https://assetsio.gnwcdn.com/how-hollow-knights-community-crafted-gibberish-into-a-real-language-1567781461548.jpg?width=1200&height=1200&fit=crop&quality=100&format=png&enable=upscale&auto=webp")
+        5 -> EditProfileScreen("qverzey", "This is my bio", null)
     }
 }
 

@@ -1,6 +1,7 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 package com.qverzey.drawtogether.ui.screens
 
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
@@ -12,12 +13,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,6 +31,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,10 +42,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
+import com.qverzey.drawtogether.EditProfileActivity
 import com.qverzey.drawtogether.data.model.Post
 import com.qverzey.drawtogether.ui.viewModels.ProfileViewModel.ProfileUiState
 import com.qverzey.drawtogether.ui.viewModels.ProfileViewModel.ProfileViewModel
@@ -57,10 +63,11 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val isRefreshing by viewModel.isRefreshing.collectAsState()
-    val scrollState = rememberScrollState()
+    val context = LocalContext.current
 
-
+    LaunchedEffect(Unit) {
+        viewModel.loadPosts()
+    }
 
     Column(
         modifier = Modifier
@@ -68,9 +75,10 @@ fun ProfileScreen(
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Profile info
+
         Spacer(Modifier.height(16.dp))
 
+        // Profile info
         Image(
             painter = rememberAsyncImagePainter(profileImageUrl),
             contentDescription = null,
@@ -85,6 +93,14 @@ fun ProfileScreen(
             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
         )
         Text(text = "@$userId", style = MaterialTheme.typography.bodyMedium)
+        Button(
+            onClick = {
+                val intent = Intent(context, EditProfileActivity::class.java)
+                context.startActivity(intent)
+            }
+        ) {
+            Text("Edit Profile")
+        }
 
         Spacer(Modifier.height(8.dp))
 
@@ -92,27 +108,20 @@ fun ProfileScreen(
             is ProfileUiState.Loading -> {
                 CircularProgressIndicator()
             }
+
             is ProfileUiState.Error -> {
                 Text(
                     text = (uiState as ProfileUiState.Error).message,
                     color = MaterialTheme.colorScheme.error
                 )
             }
+
             is ProfileUiState.Success -> {
                 val posts = (uiState as ProfileUiState.Success).posts
-                PullToRefreshBox(
-                    isRefreshing = isRefreshing,
-                    onRefresh = {viewModel.refreshPosts()},
 
-
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    PostsGrid(posts)
-                }
+                PostsGrid(posts)
             }
         }
-
-
     }
 }
 
