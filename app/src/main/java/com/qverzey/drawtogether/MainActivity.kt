@@ -1,5 +1,6 @@
 package com.qverzey.drawtogether
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Message
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Message
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.Settings
@@ -27,11 +27,12 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.qverzey.drawtogether.SignupActivity
 import com.qverzey.drawtogether.ui.screens.EditProfileScreen
 import com.qverzey.drawtogether.ui.screens.ProfileScreen
-import com.qverzey.drawtogether.ui.screens.SettingScreen
 import com.qverzey.drawtogether.ui.theme.DefaultTheme
 
 class MainActivity : ComponentActivity() {
@@ -41,7 +42,10 @@ class MainActivity : ComponentActivity() {
             DefaultTheme {
                 val destination = intent.getIntExtra("destination", 2)
 
-                MainScreen(destination)
+                //MainScreen(destination)
+                val context = LocalContext.current
+                val intent = Intent(context, SignupActivity::class.java)
+                context.startActivity(intent)
             }
         }
     }

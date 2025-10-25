@@ -4,3 +4,4 @@ data class Post(
     val id: Int,
     val imageUrl: String
 )
+
