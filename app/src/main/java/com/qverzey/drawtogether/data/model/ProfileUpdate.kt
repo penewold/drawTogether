@@ -1,7 +1,6 @@
 package com.qverzey.drawtogether.data.model
 
-data class Profile(
-    val userId: String,
+data class ProfileUpdate(
     val displayName: String,
     val bio: String,
     val profilePicture: String
