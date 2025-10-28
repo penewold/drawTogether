@@ -30,11 +30,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.qverzey.drawtogether.EditProfileActivity
+import com.qverzey.drawtogether.R
 import com.qverzey.drawtogether.data.model.Post
 import com.qverzey.drawtogether.ui.viewModels.PostUiState
 import com.qverzey.drawtogether.ui.viewModels.PostViewModel
@@ -75,32 +77,27 @@ fun ProfileScreen(
             is UserUiState.Loading -> CircularProgressIndicator()
             is UserUiState.Success -> {
                 val user = (userUiState as UserUiState.Success).user
+                Log.i("profile", "$user")
                 Image(
-                    painter = rememberAsyncImagePainter(user?.image),
+                    painter = if (user?.image != null && user.image != "") rememberAsyncImagePainter(user.image) else painterResource(
+                        R.drawable.default_profile),
                     contentDescription = null,
                     modifier = Modifier
                         .size(100.dp)
                         .clip(CircleShape),
                     contentScale = ContentScale.Crop
                 )
+                Text(
+                    text = if (user?.displayName != null) user.displayName else "Not available",
+                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
+                )
             }
             is UserUiState.Error -> Text((userUiState as UserUiState.Error).message)
             else -> {}
         }
-        Image(
-            painter = rememberAsyncImagePainter((userUiState as UserUiState.Success).user?.image),
-            contentDescription = null,
-            modifier = Modifier
-                .size(100.dp)
-                .clip(CircleShape),
-            contentScale = ContentScale.Crop
-        )
 
-        Text(
-            text = (userUiState as UserUiState.Success).user?.displayName ?: "Not available",
-            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
-        )
-        Text(text = "@$session.userId", style = MaterialTheme.typography.bodyMedium)
+
+        Text(text = "@${session.userId}", style = MaterialTheme.typography.bodyMedium)
         Button(
             onClick = {
                 val intent = Intent(context, EditProfileActivity::class.java)
@@ -111,6 +108,17 @@ fun ProfileScreen(
         }
 
         Spacer(Modifier.height(8.dp))
+
+        when (userUiState) {
+            is UserUiState.Error -> Text("Error loading posts")
+            UserUiState.Loading -> CircularProgressIndicator()
+            is UserUiState.Success -> {
+                val user = (userUiState as UserUiState.Success).user
+                if (user != null) PostsGrid(user.posts)
+
+            }
+            else -> {}
+        }
 
         when {
             postUiState is PostUiState.Loading -> {

@@ -33,21 +33,23 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.qverzey.drawtogether.SignupActivity
+import com.qverzey.drawtogether.data.local.SessionManager
 import com.qverzey.drawtogether.ui.screens.EditProfileScreen
 import com.qverzey.drawtogether.ui.screens.ProfileScreen
+import com.qverzey.drawtogether.ui.screens.SettingScreen
 import com.qverzey.drawtogether.ui.theme.DefaultTheme
 import com.qverzey.drawtogether.ui.viewModels.SessionState
 import com.qverzey.drawtogether.ui.viewModels.SessionViewModel
-import com.qverzey.drawtogether.ui.viewModels.UserUiState
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val sessionManager = SessionManager(this)
+        val factory = SessionViewModelFactory(sessionManager)
         setContent {
             DefaultTheme {
                 val context = LocalContext.current
-                val sessionViewModel: SessionViewModel = viewModel()
+                val sessionViewModel: SessionViewModel = viewModel(factory = factory)
                 val sessionState by sessionViewModel.sessionState.collectAsState()
                 when (sessionState) {
                     is SessionState.Loading -> Text("Loading")
@@ -142,7 +144,7 @@ fun BottomNavBar(selected: MutableState<Int>) {
 @Composable
 fun InsideScreen(screenIndex: Int = 2, contentPadding: PaddingValues = PaddingValues(0.dp), session: SessionState.LoggedIn) {
     when (screenIndex) {
-        0 -> SettingScreen(contentPadding)
+        0 -> SettingScreen(contentPadding, session)
         1 -> PlaceholderScreen(contentPadding)
         2 -> PlaceholderScreen(contentPadding)
         3 -> PlaceholderScreen(contentPadding)

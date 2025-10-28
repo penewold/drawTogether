@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.qverzey.drawtogether
+package com.qverzey.drawtogether.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,14 +21,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.qverzey.drawtogether.ui.viewModels.SessionState
+import com.qverzey.drawtogether.ui.viewModels.SessionViewModel
 
-@Preview(showBackground = true)
 @Composable
-fun SettingScreen(pad: PaddingValues = PaddingValues.Zero) {
+fun SettingScreen(pad: PaddingValues = PaddingValues.Zero, session: SessionState.LoggedIn) {
     var hasChanges by remember { mutableStateOf(false) }
-    var serverIpState = rememberTextFieldState("")
+    val serverIpState = rememberTextFieldState("")
+    val sessionViewModel: SessionViewModel = viewModel()
 
     Column(
         modifier = Modifier
@@ -60,6 +62,13 @@ fun SettingScreen(pad: PaddingValues = PaddingValues.Zero) {
             enabled = hasChanges
         ) {
             Text("Save")
+        }
+        Button(
+            onClick = {
+                sessionViewModel.logout()
+            }
+        ) {
+            Text("Log Out")
         }
     }
 
