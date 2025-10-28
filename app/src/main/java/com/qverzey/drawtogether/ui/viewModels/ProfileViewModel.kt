@@ -3,7 +3,8 @@ package com.qverzey.drawtogether.ui.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.qverzey.drawtogether.data.model.Post
-import com.qverzey.drawtogether.data.repository.MainRepository
+import com.qverzey.drawtogether.data.repository.PostRepository
+import com.qverzey.drawtogether.data.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -15,7 +16,7 @@ sealed class ProfileUiState {
 }
 
 class ProfileViewModel(
-    private val repository: MainRepository = MainRepository()
+    private val repository: PostRepository = PostRepository()
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<ProfileUiState>(ProfileUiState.Loading)
@@ -26,7 +27,7 @@ class ProfileViewModel(
         viewModelScope.launch {
             _uiState.value = ProfileUiState.Loading
             try {
-                val posts = repository.getPosts(userId)
+                val posts = repository.getUserPosts(userId)
                 _uiState.value = ProfileUiState.Success(posts)
             } catch (e: Exception) {
                 _uiState.value = ProfileUiState.Error("Failed to load posts: ${e.message}")

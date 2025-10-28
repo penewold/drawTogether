@@ -36,24 +36,30 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.qverzey.drawtogether.EditProfileActivity
 import com.qverzey.drawtogether.data.model.Post
-import com.qverzey.drawtogether.ui.viewModels.ProfileUiState
-import com.qverzey.drawtogether.ui.viewModels.ProfileViewModel
+import com.qverzey.drawtogether.ui.viewModels.PostUiState
+import com.qverzey.drawtogether.ui.viewModels.PostViewModel
+import com.qverzey.drawtogether.ui.viewModels.SessionState
+import com.qverzey.drawtogether.ui.viewModels.UserUiState
+import com.qverzey.drawtogether.ui.viewModels.UserViewModel
 
 
 @Composable
 fun ProfileScreen(
     contentPadding: PaddingValues,
-    userName: String,
-    userId: String,
-    profileImageUrl: String,
-    viewModel: ProfileViewModel = viewModel()
+    session: SessionState.LoggedIn,
+    userViewModel: UserViewModel = viewModel(),
+    postViewModel: PostViewModel = viewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-    val context = LocalContext.current
-
     LaunchedEffect(Unit) {
-        viewModel.loadPosts()
+
+        userViewModel.getUser(session.userId)
+        postViewModel.getUserPosts(session.userId)
+
     }
+
+    val userUiState by userViewModel.uiState.collectAsState()
+    val postUiState by postViewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -65,8 +71,24 @@ fun ProfileScreen(
         Spacer(Modifier.height(16.dp))
 
         // Profile info
+        when (userUiState) {
+            is UserUiState.Loading -> CircularProgressIndicator()
+            is UserUiState.Success -> {
+                val user = (userUiState as UserUiState.Success).user
+                Image(
+                    painter = rememberAsyncImagePainter(user?.image),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(100.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
+                )
+            }
+            is UserUiState.Error -> Text((userUiState as UserUiState.Error).message)
+            else -> {}
+        }
         Image(
-            painter = rememberAsyncImagePainter(profileImageUrl),
+            painter = rememberAsyncImagePainter((userUiState as UserUiState.Success).user?.image),
             contentDescription = null,
             modifier = Modifier
                 .size(100.dp)
@@ -75,10 +97,10 @@ fun ProfileScreen(
         )
 
         Text(
-            text = userName,
+            text = (userUiState as UserUiState.Success).user?.displayName ?: "Not available",
             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
         )
-        Text(text = "@$userId", style = MaterialTheme.typography.bodyMedium)
+        Text(text = "@$session.userId", style = MaterialTheme.typography.bodyMedium)
         Button(
             onClick = {
                 val intent = Intent(context, EditProfileActivity::class.java)
@@ -90,26 +112,38 @@ fun ProfileScreen(
 
         Spacer(Modifier.height(8.dp))
 
-        when (uiState) {
-            is ProfileUiState.Loading -> {
-                CircularProgressIndicator()
+        when {
+            postUiState is PostUiState.Loading -> {
+                CircularProgressIndicator(modifier = Modifier.fillMaxSize())
             }
 
-            is ProfileUiState.Error -> {
+            userUiState is UserUiState.Error -> {
                 Text(
-                    text = (uiState as ProfileUiState.Error).message,
+                    text = (userUiState as UserUiState.Error).message,
                     color = MaterialTheme.colorScheme.error
                 )
             }
 
-            is ProfileUiState.Success -> {
-                val posts = (uiState as ProfileUiState.Success).posts
+            postUiState is PostUiState.Error -> {
+                Text(
+                    text = (postUiState as PostUiState.Error).message,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
 
-                PostsGrid(posts)
+            else -> {
+                val user = (userUiState as? UserUiState.Success)?.user
+
+                // Only show content if session exists and user data is loaded
+                if (session is SessionState.LoggedIn && user != null) {
+                    PostsGrid(user.posts)
+
+                }
             }
         }
     }
 }
+
 
 @Composable
 fun PostsGrid(posts: List<Post>) {

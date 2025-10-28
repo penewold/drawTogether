@@ -68,7 +68,7 @@ fun EditProfileScreen(
     val isChanged = usernameText != userName || bioText != bio
 
     LaunchedEffect(Unit) {
-        viewModel.loadPosts()
+        TODO("load info")
     }
 
     val profileImage: Painter = if (profileImageUrl == null) {

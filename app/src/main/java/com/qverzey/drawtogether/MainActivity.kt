@@ -24,28 +24,42 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.qverzey.drawtogether.SignupActivity
 import com.qverzey.drawtogether.ui.screens.EditProfileScreen
 import com.qverzey.drawtogether.ui.screens.ProfileScreen
 import com.qverzey.drawtogether.ui.theme.DefaultTheme
+import com.qverzey.drawtogether.ui.viewModels.SessionState
+import com.qverzey.drawtogether.ui.viewModels.SessionViewModel
+import com.qverzey.drawtogether.ui.viewModels.UserUiState
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             DefaultTheme {
-                val destination = intent.getIntExtra("destination", 2)
-
-                //MainScreen(destination)
                 val context = LocalContext.current
-                val intent = Intent(context, SignupActivity::class.java)
-                context.startActivity(intent)
+                val sessionViewModel: SessionViewModel = viewModel()
+                val sessionState by sessionViewModel.sessionState.collectAsState()
+                when (sessionState) {
+                    is SessionState.Loading -> Text("Loading")
+                    is SessionState.LoggedOut -> {
+                        val intent = Intent(context, SignupActivity::class.java)
+                        context.startActivity(intent)
+                    }
+                    is SessionState.LoggedIn -> {
+                        val session = sessionState as SessionState.LoggedIn
+                        MainScreen(session)
+                    }
+                }
             }
         }
     }
@@ -55,14 +69,14 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreenPreview() {
     DefaultTheme {
-        MainScreen(4)
+        MainScreen(SessionState.LoggedIn("hello", "hello"))
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(startIndex: Int = 2) {
-    val selectedIndex = remember { mutableIntStateOf(startIndex) }
+fun MainScreen(session: SessionState.LoggedIn) {
+    val selectedIndex = remember { mutableIntStateOf(2) }
 
     Scaffold(
         topBar = {
@@ -79,7 +93,7 @@ fun MainScreen(startIndex: Int = 2) {
         }
     ) { paddingValues ->
         // Main content
-        InsideScreen(selectedIndex.intValue, contentPadding = paddingValues)
+        InsideScreen(selectedIndex.intValue, contentPadding = paddingValues, session)
     }
 
 }
@@ -126,13 +140,13 @@ fun BottomNavBar(selected: MutableState<Int>) {
 }
 
 @Composable
-fun InsideScreen(screenIndex: Int = 2, contentPadding: PaddingValues = PaddingValues(0.dp)) {
+fun InsideScreen(screenIndex: Int = 2, contentPadding: PaddingValues = PaddingValues(0.dp), session: SessionState.LoggedIn) {
     when (screenIndex) {
         0 -> SettingScreen(contentPadding)
         1 -> PlaceholderScreen(contentPadding)
         2 -> PlaceholderScreen(contentPadding)
         3 -> PlaceholderScreen(contentPadding)
-        4 -> ProfileScreen(contentPadding,"qverzey", "0001", "https://assetsio.gnwcdn.com/how-hollow-knights-community-crafted-gibberish-into-a-real-language-1567781461548.jpg?width=1200&height=1200&fit=crop&quality=100&format=png&enable=upscale&auto=webp")
+        4 -> ProfileScreen(contentPadding, session)
         5 -> EditProfileScreen("qverzey", "This is my bio", null)
     }
 }

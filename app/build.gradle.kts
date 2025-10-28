@@ -60,6 +60,8 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.accompanist.swiperefresh)
     implementation(libs.androidx.foundation)
+    implementation(libs.androidx.datastore.preferences.core)
+    implementation(libs.androidx.datastore.preferences)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -4,14 +4,16 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance {
-    // ports to be used: 53782, 53783
-    private const val BASE_URL = "http://10.0.0.5:53782"  // Replace with your real API base URL
+    private const val BASE_URL = "http://10.0.0.5:53782/"
 
-    val api: ApiService by lazy {
+    private val retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(ApiService::class.java)
     }
+
+    val userApi: UserApiService by lazy { retrofit.create(UserApiService::class.java) }
+    val postApi: PostApiService by lazy { retrofit.create(PostApiService::class.java) }
+    val imageApi: ImageApiService by lazy { retrofit.create(ImageApiService::class.java) }
 }

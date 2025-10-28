@@ -2,10 +2,8 @@ package com.qverzey.drawtogether.ui.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.qverzey.drawtogether.data.model.Post
 import com.qverzey.drawtogether.data.model.ProfileCreationInfo
-import com.qverzey.drawtogether.data.model.ResponseInfo
-import com.qverzey.drawtogether.data.repository.MainRepository
+import com.qverzey.drawtogether.data.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -18,7 +16,7 @@ sealed class CreateUserUiState {
 }
 
 class CreateUserViewModel(
-    private val repository: MainRepository = MainRepository()
+    private val repository: UserRepository = UserRepository()
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<CreateUserUiState>(CreateUserUiState.Idle)
