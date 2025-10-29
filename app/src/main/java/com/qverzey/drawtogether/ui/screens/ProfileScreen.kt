@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -50,17 +51,12 @@ fun ProfileScreen(
     contentPadding: PaddingValues,
     session: SessionState.LoggedIn,
     userViewModel: UserViewModel = viewModel(),
-    postViewModel: PostViewModel = viewModel()
 ) {
     LaunchedEffect(Unit) {
-
         userViewModel.getUser(session.userId)
-        postViewModel.getUserPosts(session.userId)
-
     }
 
     val userUiState by userViewModel.uiState.collectAsState()
-    val postUiState by postViewModel.uiState.collectAsState()
     val context = LocalContext.current
 
     Column(
@@ -104,7 +100,7 @@ fun ProfileScreen(
                 context.startActivity(intent)
             }
         ) {
-            Text("Edit Profile")
+            Text(stringResource(R.string.edit_profile))
         }
 
         Spacer(Modifier.height(8.dp))

@@ -21,8 +21,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.qverzey.drawtogether.R
 import com.qverzey.drawtogether.ui.viewModels.SessionState
 import com.qverzey.drawtogether.ui.viewModels.SessionViewModel
 
@@ -47,7 +49,7 @@ fun SettingScreen(pad: PaddingValues = PaddingValues.Zero, session: SessionState
                 state = serverIpState,
                 lineLimits = TextFieldLineLimits.SingleLine,
                 label = {
-                    Text("Frontend Server ip")
+                    Text(stringResource(R.string.frontend_server_ip))
                 }
             )
         }
@@ -61,14 +63,14 @@ fun SettingScreen(pad: PaddingValues = PaddingValues.Zero, session: SessionState
                 .fillMaxWidth(),
             enabled = hasChanges
         ) {
-            Text("Save")
+            Text(stringResource(R.string.save))
         }
         Button(
             onClick = {
                 sessionViewModel.logout()
             }
         ) {
-            Text("Log Out")
+            Text(stringResource(R.string.log_out))
         }
     }
 

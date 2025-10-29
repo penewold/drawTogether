@@ -34,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -41,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.qverzey.drawtogether.LoginActivity
+import com.qverzey.drawtogether.R
 import com.qverzey.drawtogether.ui.viewModels.AuthUiState
 import com.qverzey.drawtogether.ui.viewModels.AuthViewModel
 
@@ -70,12 +72,12 @@ fun SignupScreen(viewModel: AuthViewModel = viewModel(),
             Spacer(Modifier.padding(16.dp))
             OutlinedTextField(
                 state = displayTextState,
-                label = {Text("display name")},
+                label = {Text(stringResource(R.string.display_name))},
                 modifier = Modifier.padding(4.dp)
             )
             OutlinedTextField(
                 state = usernameTextState,
-                label = {Text("user name")},
+                label = {Text(stringResource(R.string.user_name))},
                 modifier = Modifier.padding(4.dp),
                 inputTransformation = {
                     if(length > 1) {
@@ -89,7 +91,7 @@ fun SignupScreen(viewModel: AuthViewModel = viewModel(),
 
             OutlinedSecureTextField(
                 state = passwordTextState,
-                label = { Text("Password") },
+                label = { Text(stringResource(R.string.password)) },
                 modifier = Modifier.padding(4.dp),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
 
@@ -144,7 +146,7 @@ fun SignupScreen(viewModel: AuthViewModel = viewModel(),
                 modifier = Modifier
                     .fillMaxWidth(0.5f)
             ) {
-                Text("Log in instead")
+                Text(stringResource(R.string.log_in_instead))
             }
 
         }

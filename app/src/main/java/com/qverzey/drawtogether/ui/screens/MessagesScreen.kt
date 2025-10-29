@@ -44,9 +44,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.qverzey.drawtogether.R
 import com.qverzey.drawtogether.data.model.FriendInfo
 import com.qverzey.drawtogether.data.model.FriendRequestInfo
 import com.qverzey.drawtogether.ui.viewModels.FriendUiState
@@ -140,7 +142,7 @@ private fun FriendScreenContent(
         OutlinedTextField(
             value = friendIdInput,
             onValueChange = { friendIdInput = it },
-            label = { Text("Friend ID") },
+            label = { Text(stringResource(R.string.friend_id)) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
@@ -162,7 +164,7 @@ private fun FriendScreenContent(
                 .padding(top = 8.dp)
                 .fillMaxWidth()
         ) {
-            Text("Add Friend")
+            Text(stringResource(R.string.add_friend))
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -209,7 +211,7 @@ private fun FriendScreenContent(
                     onClick = { friendViewModel.getFriends(userId) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Load Friends")
+                    Text(stringResource(R.string.load_friends))
                 }
             }
         }
@@ -223,7 +225,7 @@ fun FriendList(
     onClickFriend: (String) -> Unit
 ) {
     if (friends.isEmpty()) {
-        Text("You have no friends yet 😢", style = MaterialTheme.typography.bodyLarge)
+        Text(text = stringResource(R.string.you_have_no_friends_yet), style = MaterialTheme.typography.bodyLarge)
     } else {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -262,9 +264,9 @@ fun FriendCard(
                 text = friend.id,
                 style = MaterialTheme.typography.bodyLarge
             )
-            if (!friend.confirmed) Text("Waiting...")
+            if (!friend.confirmed) Text(stringResource(R.string.waiting))
             TextButton(onClick = { onRemoveFriend(friend.id) }) {
-                Text("Remove", color = MaterialTheme.colorScheme.error)
+                Text(text = stringResource(R.string.remove), color = MaterialTheme.colorScheme.error)
             }
         }
     }

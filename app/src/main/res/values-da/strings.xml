@@ -1,4 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="drawScreenTitle">Tegning</string>
+    <string name="drawScreenTitle">Bubble</string>
+    <string name="friends">Venner</string>
+    <string name="profile">Profil</string>
+    <string name="home">Hjem</string>
+    <string name="gallery">Galleri</string>
+    <string name="settings">Indstillinger</string>
+    <string name="edit_profile">Rediger profil</string>
+    <string name="user_name">burgernavn</string>
+    <string name="display_name">visningsnavn</string>
+    <string name="password">adgangskode</string>
+    <string name="log_in_instead">Log ind i stedet</string>
+    <string name="save">Gem</string>
+    <string name="log_out">Log ud</string>
+    <string name="frontend_server_ip">server ip (ikke funktionel)</string>
+    <string name="friend_id">Venne id</string>
+    <string name="add_friend">Tilføj Ven</string>
+    <string name="load_friends">Indlæs Venner</string>
+    <string name="you_have_no_friends_yet">Du har ikke tilføjet nogen (endnu)</string>
+    <string name="remove">Fjern</string>
+    <string name="waiting">Sendt...</string>
+    <string name="log_in">Log ind</string>
+    <string name="sign_up_instead">Tilmeld i stedet</string>
+    <string name="msg1">Du betyder mere, end du aner – selv når der føles stille omkring dig.</string>
+    <string name="msg2">Dette øjeblik varer ikke evigt; lysere dage er allerede på vej</string>
+    <string name="msg3">Nogen derude ville være så heldig at kende dig - bliv ved med at være dig.</string>
+    <string name="msg4">Det er okay at optage plads, at have brug for kærlighed og at hvile.</string>
+    <string name="msg5">Selv små skridt mod forbindelse tæller – du klarer dig fantastisk.</string>
+    <string name="hey_ready_to_create">Hey %1$s! Klar til at skabe sammen</string>
+    <string name="surprise_me">Overrask mig</string>
+    <string name="bio">Bio</string>
+    <string name="public_profile">offentlig profil</string>
+    <string name="unsaved_changes">Ugemte ændringer</string>
+    <string name="unsaved_changes_body">Du har ugemte ændringer. Er du sikker på at lukke</string>
+    <string name="exit">Luk</string>
+    <string name="cancel">Annuler</string>
 </resources>

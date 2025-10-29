@@ -54,6 +54,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -149,7 +150,7 @@ fun EditProfileScreen(
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 title = {
-                    Text("Edit profile")
+                    Text(stringResource(R.string.edit_profile))
                 },
                 navigationIcon = {
                     IconButton(
@@ -236,19 +237,19 @@ fun EditProfileScreen(
 
             OutlinedTextField(
                 state = displayNameState,
-                label = { Text("Display name") },
+                label = { Text(stringResource(R.string.display_name)) },
             )
 
             OutlinedTextField(
                 state = bioState,
-                label = { Text("Bio") },
+                label = { Text(stringResource(R.string.bio)) },
                 lineLimits = TextFieldLineLimits.MultiLine(5, 10),
             )
 
             Row (
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("public profile")
+                Text(stringResource(R.string.public_profile))
                 Checkbox(
                     visibility,
                     {visibility = it}
@@ -279,16 +280,16 @@ fun ExitConfirmationDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Unsaved Changes") },
-        text = { Text("You have unsaved changes. Are you sure you want to exit?") },
+        title = { Text(stringResource(R.string.unsaved_changes)) },
+        text = { Text(stringResource(R.string.unsaved_changes_body)) },
         confirmButton = {
             TextButton(onClick = onConfirm) {
-                Text("Exit")
+                Text(stringResource(R.string.exit))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(R.string.cancel))
             }
         }
     )
