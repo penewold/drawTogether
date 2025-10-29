@@ -54,7 +54,7 @@ fun SettingScreen(pad: PaddingValues = PaddingValues.Zero, session: SessionState
         Spacer(modifier = Modifier.weight(1f))
         Button(
             onClick = {
-//TODO: make save functionality
+
                 hasChanges = false
             },
             modifier = Modifier

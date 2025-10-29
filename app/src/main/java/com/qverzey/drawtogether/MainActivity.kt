@@ -35,6 +35,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.qverzey.drawtogether.data.local.SessionManager
 import com.qverzey.drawtogether.ui.screens.EditProfileScreen
+import com.qverzey.drawtogether.ui.screens.GalleryScreen
+import com.qverzey.drawtogether.ui.screens.MessagesScreen
 import com.qverzey.drawtogether.ui.screens.ProfileScreen
 import com.qverzey.drawtogether.ui.screens.SettingScreen
 import com.qverzey.drawtogether.ui.theme.DefaultTheme
@@ -81,15 +83,6 @@ fun MainScreen(session: SessionState.LoggedIn) {
     val selectedIndex = remember { mutableIntStateOf(2) }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Material 3 App") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                )
-            )
-        },
         bottomBar = {
             BottomNavBar(selected = selectedIndex)
         }
@@ -145,11 +138,10 @@ fun BottomNavBar(selected: MutableState<Int>) {
 fun InsideScreen(screenIndex: Int = 2, contentPadding: PaddingValues = PaddingValues(0.dp), session: SessionState.LoggedIn) {
     when (screenIndex) {
         0 -> SettingScreen(contentPadding, session)
-        1 -> PlaceholderScreen(contentPadding)
+        1 -> GalleryScreen(contentPadding)
         2 -> PlaceholderScreen(contentPadding)
-        3 -> PlaceholderScreen(contentPadding)
+        3 -> MessagesScreen(contentPadding, session)
         4 -> ProfileScreen(contentPadding, session)
-        5 -> EditProfileScreen("qverzey", "This is my bio", null)
     }
 }
 
